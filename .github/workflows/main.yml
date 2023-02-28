@@ -16,6 +16,10 @@ jobs:
         with:
           node-version: 14.17.0
           cache: 'yarn'
+      - uses: actions/cache@v3
+        with:
+          path: '**/dist'
+          key: build-dist-${{ github.sha }}
       - name: Install dependencies
         run: yarn install
       - name: Run tsc
@@ -30,5 +34,9 @@ jobs:
         with:
           node-version: 14.17.0
           cache: 'yarn'
+      - uses: actions/cache@v3
+        with:
+          path: '**/dist'
+          key: build-dist-${{ github.sha }}
       - name: Run unit tests
         run: yarn test --watchAll=false --maxConcurrency=1
