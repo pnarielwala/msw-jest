@@ -1,0 +1,34 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/fermium'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tsc
+        run: yarn tsc
+  test:
+    name: Run unit tests
+    needs: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/fermium'
+          cache: 'yarn'
+      - name: Run unit tests
+        run: yarn test --watchAll=false --maxConcurrency=1
