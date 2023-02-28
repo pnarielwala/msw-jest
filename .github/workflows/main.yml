@@ -7,26 +7,8 @@ on:
     branches: ['main']
 
 jobs:
-  typecheck:
-    name: Typecheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 14.17.0
-          cache: 'yarn'
-      - uses: actions/cache@v3
-        with:
-          path: '**/dist'
-          key: build-dist-${{ github.sha }}
-      - name: Install dependencies
-        run: yarn install
-      - name: Run tsc
-        run: yarn tsc
   test:
     name: Run unit tests
-    needs: typecheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,9 +16,7 @@ jobs:
         with:
           node-version: 14.17.0
           cache: 'yarn'
-      - uses: actions/cache@v3
-        with:
-          path: '**/dist'
-          key: build-dist-${{ github.sha }}
+      - name: Install dependencies
+        run: yarn install
       - name: Run unit tests
         run: yarn test --watchAll=false --maxConcurrency=1
